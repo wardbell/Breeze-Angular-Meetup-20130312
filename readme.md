@@ -9,7 +9,7 @@ Herein are materials from Ward Bell's presentation at the meetup in Mt. View:
 
 - AutoHotKey script (*ngDemo.ahk*) of my step-by-step snippets
 
-- Shortcut to running sample on Plunker
+See the [code running on Plunker](http://plnkr.co/fmHhoh "Sample running on Plunker")
 
 Learn more about Breeze at [www.breezejs.com](http://www.breezejs.com "Breeze web site"), follow us on twitter [@breezejs](https://twitter.com/breezejs "BreezeJS twitter"), and follow me if you wish [@wardbell](https://twitter.com/wardbell "Ward's twitter").
 
