@@ -1,0 +1,126 @@
+ngDemoScript
+============
+NEW FILES
+index.html: (ngicreate)
+app:        (ngacreate)
+datacontext (ngdcreate)
+
+----------------------
+Controller should get something when it starts
+app:  add getItems (ngaget)
+
+
+-----------------
+Give the DataContext a different dummy get
+datacontext:  replace getItems (ngdget)
+
+
+------------------
+Bind to it  (ngibind)
+index: {{item.FirstName}} {{item.LastName}}
+
+
+-----------------
+Give the DataContext an $http version
+datacontext: (ngd$http) // replace getSucceeded as well
+[set datasource switch in app.js to local/remote as needed]
+
+-----------------
+"What about the order? filtering?"
+Switch to simple Breeze query
+datacontext (ngdspeakers) // replace promise and getSucceeded as well
+
+-----
+Will load but won't display until change to camelCase
+index: {{item.firstName}} {{item.lastName}}  // <-- camelCase !!!
+
+datacontext: add to query:    .orderBy('firstName, lastName')
+datacontext: add to query:    .where('lastName', 'startsWith', 'B')  (or 'b')
+
+
+-----------------
+"Too much data in a Speaker? Use a projection"
+datacontext: add to query:    .select('firstName, lastName')
+
+SHOW network traffic
+REMOVE it (will interfere with later stuff;
+
+
+-----------------
+"Don't hardcode 'b'; let's make a searchBox "
+index: add below <h1> (ngisearch)   
+
+"use it in the controller"
+app: add (ngasearch)   
+    $scope.searchText = "";
+    $scope.$watch('searchText', getItems);
+	
+"make the datacontext use it"
+datacontext: getItems
+             ADD 'searchText' PARAMETER
+			 insert search in getItems (ngdsearch)
+
+-----------------
+"Why search just the last name? Let's search first name too"
+datacontext: replace "query = query.where(..."  with (ngdpred)
+
+			 
+-----------------
+"What if network is slow ... let's make it slow"
+datacontext: replace "return manager.execute..."  (ngdslow)
+
+-----------------
+"Let's wait until user stops typing"
+app: add delayedSearch (ngadelay) ... just above getItems()
+     replace watch fn with delayedSearch
+
+	 
+-----------------	 
+"Why go to the server when we have all the speakers anyway?
+ We can query locally"
+index: above search (ngistaylocal)
+app:   bottom of $scope (ngastaylocal)
+dc:    replace "if (searchText) ..." block (ngdstaylocal)
+
+
+-----------------
+"What about related info? Speakers have sessions"
+"Can fetch eagerly or on demand ... let's do eagerly"	
+
+dc: in getItems query add      .expand('speakerSessions')
+index:  change display of lists (ngiexpand)
+
+-----------------
+"Model entities have behavior. Where are they?"
+
+ADD new model.js (ngmCreate)
+dc:  get model and initialize it
+     add 'model' to ctor
+	 after manager def, call     model.initialize(manager.metadataStore);
+
+index:  
+    add  <script src="model.js"></script>
+    show fullname (ngifullname)
+
+
+----------------------------------------	
+CHANGE TRACKING & VALIDATION
+    isDirty ... in the entity, not the screen
+	changing what's displayed doesn't change entity-is-dirty
+	
+	Breakpoint in datacontext on local (just to stop it)
+	At the break:
+	    manager.getChanges()
+		manager.getChanges()[0].fullName()
+		manager.getChanges()[0].entityAspect.entityState
+		manager.getChanges()[0].entityAspect.originalValues
+        manager.getChanges()[0].entityAspect.getValidationErrors()	
+	Rollback
+		manager.rejectChanges()
+		
+
+------------------------------------		
+METADATA
+		// explore the type; find the validators on the "firstName" property
+		manager.metadataStore.getEntityType('Person')
+		

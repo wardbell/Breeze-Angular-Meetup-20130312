@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html >
+  <head lang="en">
+    <meta charset="utf-8">
+    <title>Breeze/Ng Sample</title>
+    <!-- Breeze local: http://localhost:63428  remote: http://sampleservice.breezejs.com -->
+    <link rel="stylesheet" href="http://sampleservice.breezejs.com/content/styles.css">
+  </head>
+
+  <body id="view" data-ng-app="app" data-ng-controller="MainCtrl" class="ng-cloak">
+    <h1>Breeze/Ng Sample</h1>
+    <p>Stay local: <input type='checkbox' data-ng-model="stayLocal" />
+    <p>Search: <input data-ng-model="searchText" /> {{searchText}}
+    <span data-ng-bind="lastLog()" class="message"></span></p>
+
+    <label class="error" data-ng-show="errorMessage">{{errorMessage}}</label>
+
+	<!-- I'm using a table ... so shoot me! -->
+	<table><tr><td style="vertical-align: top; min-width:10em">
+    <h3>Data:</h3>
+
+    <ul class=items>
+      <li data-ng-repeat="item in items">
+        
+          <input data-ng-model="item.firstName" data-ng-class="{isDirty:item.isDirty()}"/>
+          <input data-ng-model="item.lastName"  data-ng-class="{isDirty:item.isDirty()}"/>
+          <span data-ng-bind="item.fullName()"  data-ng-class="{isDirty:item.isDirty()}"></span>
+         <ul>
+           <li data-ng-repeat="session in item.speakerSessions">
+               Session: {{session.title}}
+           </li>
+         </ul>
+      </li>
+    </ul>
+
+
+    </td><td style="vertical-align: top;">
+    <h2>Log:</h2>
+    <ol id="log" type="1">
+      <li data-ng-repeat="log in logList">{{log}}</li>
+    </ol>
+
+	</td></tr></table>
+    <p>
+        <a href="http://www.breezejs.com" target="_blank">Breeze Home</a>
+    </p>
+    <!-- 3rd party libs -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.js"></script>
+    <script src="http://sampleservice.breezejs.com/scripts/q.min.js"></script>
+    <script src="http://sampleservice.breezejs.com/scripts/breeze.min.js"></script>
+    <script src="http://sampleservice.breezejs.com/scripts/plunkerHelpers.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+
+    <!-- app libs -->
+    <script>
+      document.write('<base href="' + document.location + '" />');
+    </script>
+    <script src="app.js"></script>
+    <script src="datacontext.js"></script>
+        <script src="model.js"></script>
+    <script src="http://sampleservice.breezejs.com/scripts/ngLogger.js"></script>
+  </body>
+</html>
