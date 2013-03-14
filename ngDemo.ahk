@@ -321,17 +321,15 @@ return
 clipboard=
 (  
   var oldSearchText;
- 
+
+  // wait until user stops typing (searchText === oldSearchText)
   function delayedSearch(newVal, oldVal){
-    if (newVal === oldVal) {return; } // skip 1st time
-      oldSearchText = newVal;
-      $timeout(search, 500);
-	  // inject $timeout
-  }
-  function search() {
-    if ($scope.searchText === oldSearchText)  { 
+    if ($scope.searchText === oldSearchText)  {
       getItems();
-	  oldSearchText = null;
+      oldSearchText = null;
+    } else if (newVal !== oldVal) { // if not init phase
+      oldSearchText = newVal;
+      $timeout(delayedSearch, 800);
     }
   }
 )
@@ -355,7 +353,9 @@ clipboard=
 (
     $scope.stayLocal = false;
     $scope.$watch('stayLocal', function(newVal, oldVal) {
-      if (newVal !== oldVal) {getItems(); } 
+      if (newVal !== oldVal) { // if not init phase
+        getItems(); 
+      } 
     });
 )
 send ^v 
